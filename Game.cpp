@@ -11,9 +11,12 @@ Game::Game(int w,int h):running(true),mouseDown(false) {
 
     player_texture=window.LoadTexture("res/player.png");
     weapon_texture=window.LoadTexture("res/pistol.png");
+    road_texture=window.LoadTexture("res/road.png");
     player=new Player(w/2,h/2,5,5,60);
     vx=0;
     vy=0;
+
+    roadRect={0,0,1280,720};
 }
 
 Game::~Game() {}
@@ -70,18 +73,19 @@ void Game::Update() {
 void Game::Render() {
     window.Clear();
 
-    window.FillFloor();
+    roadRect.x-=0.5;
+    if(roadRect.x<=-1280){
+        roadRect.x=0;
+    }
+    window.DrawTexture(road_texture,nullptr,&roadRect,0);
+    SDL_Rect road2={roadRect.x+1280,0,1280,720};
+    window.DrawTexture(road_texture,nullptr,&road2);
 
-    SDL_Rect dst={player->GetX()-player->GetSize()/2,player->GetY()-player->GetSize()/2,player->GetSize(),player->GetSize()};
+    SDL_Rect dst={player->GetX(),player->GetY(),player->GetSize(),player->GetSize()};
     window.DrawTexture(player_texture,nullptr,&dst,player->GetDirection());
 
     SDL_FRect gunpos=player->GetGunPos();
     window.DrawTexture(weapon_texture,nullptr,&gunpos,player->GetDirection());
-
-    int mx,my;
-    SDL_GetMouseState(&mx,&my);
-
-    window.DrawLine(player->GetX(),player->GetY(),mx,my);
 
     window.Present();
 }

@@ -50,8 +50,3 @@ void Window::DrawTexture(SDL_Texture* texture,SDL_Rect*src ,SDL_FRect *dst,int a
 SDL_Texture* Window::LoadTexture(const char*filename){
     return IMG_LoadTexture(renderer,filename);
 }
-
-void Window::FillFloor(){
-    SDL_SetRenderDrawColor(renderer,220,220,220,255);
-    SDL_RenderFillRect(renderer,nullptr);
-}

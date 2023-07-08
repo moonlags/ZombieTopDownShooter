@@ -20,16 +20,16 @@ public:
 private:
     SDL_Texture* player_texture;
     SDL_Texture* weapon_texture;
-    SDL_Texture* floor_texture;
+    SDL_Texture* road_texture;
     SDL_Texture* zombie_texture;
     bool running;
     Window window;
-    //Camera camera;
     Player* player;
     //std::vector<Zombie> zombies;
     //std::vector<Bullet> bullets;
     bool mouseDown;
     int vx,vy;
+    SDL_FRect roadRect;
 };
 
 

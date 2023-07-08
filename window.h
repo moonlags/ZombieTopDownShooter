@@ -13,7 +13,6 @@ public:
 	void DrawTexture(SDL_Texture* texture,SDL_Rect* src,SDL_Rect *dst);
 	void DrawTexture(SDL_Texture* texture,SDL_Rect*src ,SDL_Rect *dst,int angle);
 	void DrawTexture(SDL_Texture* texture,SDL_Rect*src ,SDL_FRect *dst,int angle);
-	void FillFloor();
 	void DrawLine(int x,int y,int x1,int y2);
 private:
 	SDL_Window* window=nullptr;
