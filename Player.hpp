@@ -6,7 +6,7 @@
 
 class Player{
 public:
-    Player(int x,int y,int vx,int vy,int size);
+    Player(int x,int y,int size);
     void Update(int mx,int my,int fx,int fy);
     int GetX();
     int GetY();
@@ -15,7 +15,6 @@ public:
     SDL_FRect GetGunPos();
 private:
     float direction;
-    int vx,vy;
     int x,y;
     int size;
 };

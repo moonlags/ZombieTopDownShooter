@@ -12,7 +12,7 @@
 
 class Game {
 public:
-    Game(int w,int h);
+    Game(int w,int h,int speed);
     bool isRunning() const;
     virtual ~Game();
     void Update();
@@ -29,6 +29,7 @@ private:
     //std::vector<Bullet> bullets;
     bool mouseDown;
     int vx,vy;
+    int speed;
     SDL_FRect roadRect;
 };
 

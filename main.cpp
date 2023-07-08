@@ -6,7 +6,7 @@ const int FPS=60;
 const int FrameDelay=1000/FPS;
 
 int main(int argc,char** argv){
-    Game game=Game(1280,720);
+    Game game=Game(1280,720,5);
 
     int FrameStart;
     int FrameTime;

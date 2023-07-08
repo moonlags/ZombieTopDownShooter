@@ -2,23 +2,27 @@
 #include <cmath>
 #include <iostream>
 
-Player::Player(int x,int y,int vx,int vy,int size):size(size),x(x),y(y),vx(vx),vy(vy),direction(0){}
+Player::Player(int x,int y,int size):size(size),x(x),y(y),direction(0){}
 
 void Player::Update(int mx,int my,int fx,int fy){
     direction=atan2(my-(y+size/2),mx-(x+size/2));
     if (direction<0)
         direction+=2*PI;
 
-    x+=fx*vx;
-    y+=fy*vy;
-    if(x>1280-size){
-        x=1280-size;
-    }else if(x<0){
+    x+=fx;
+    y+=fy;
+    if(x<0){
         x=0;
     }else if(y<0){
         y=0;
     }else if(y>720-size){
         y=720-size;
+    }else if(x>960){
+        if(fx!=0){
+            x=961;
+        }else{
+            x=960;
+        }
     }
 }
 

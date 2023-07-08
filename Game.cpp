@@ -6,13 +6,13 @@
 #include <iostream>
 #include <cmath>
 
-Game::Game(int w,int h):running(true),mouseDown(false) {
+Game::Game(int w,int h,int speed):speed(speed),running(true),mouseDown(false) {
     window.Init("Zombie",w,h);
 
     player_texture=window.LoadTexture("res/player.png");
     weapon_texture=window.LoadTexture("res/pistol.png");
     road_texture=window.LoadTexture("res/road.png");
-    player=new Player(w/2,h/2,5,5,60);
+    player=new Player(w/2,h/2,60);
     vx=0;
     vy=0;
 
@@ -45,13 +45,13 @@ void Game::Update() {
             if(event.key.keysym.sym==SDLK_ESCAPE){
                 running=false;
             }else if(event.key.keysym.sym==SDLK_w){
-                vy=-1;
+                vy=-speed;
             }else if(event.key.keysym.sym==SDLK_s){
-                vy=1;
+                vy=speed;
             }else if(event.key.keysym.sym==SDLK_a){
-                vx=-1;
+                vx=-speed;
             }else if(event.key.keysym.sym==SDLK_d){
-                vx=1;
+                vx=speed;
             }
             break;
         case SDL_KEYUP:
@@ -67,16 +67,19 @@ void Game::Update() {
             break;
     }
 
+    if(player->GetX()>960){
+        roadRect.x-=speed;
+        if(roadRect.x<=-1280){
+            roadRect.x=0;
+        }
+    }
+
     player->Update(mx,my,vx,vy);
 }
 
 void Game::Render() {
     window.Clear();
 
-    roadRect.x-=0.5;
-    if(roadRect.x<=-1280){
-        roadRect.x=0;
-    }
     window.DrawTexture(road_texture,nullptr,&roadRect,0);
     SDL_Rect road2={roadRect.x+1280,0,1280,720};
     window.DrawTexture(road_texture,nullptr,&road2);
