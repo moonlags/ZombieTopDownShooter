@@ -6,6 +6,8 @@
 #include <iostream>
 #include <cmath>
 
+enum {w,a,s,d};
+
 Game::Game(int w,int h,int speed):speed(speed),running(true),mouseDown(false) {
     window.Init("Zombie",w,h);
 
@@ -46,23 +48,27 @@ void Game::Update() {
                 running=false;
             }else if(event.key.keysym.sym==SDLK_w){
                 vy=-speed;
+                keys[w]=true;
             }else if(event.key.keysym.sym==SDLK_s){
                 vy=speed;
+                keys[s]=true;
             }else if(event.key.keysym.sym==SDLK_a){
                 vx=-speed;
+                keys[a]=true;
             }else if(event.key.keysym.sym==SDLK_d){
                 vx=speed;
+                keys[d]=true;
             }
             break;
         case SDL_KEYUP:
             if(event.key.keysym.sym==SDLK_w){
-                vy=0;
+                keys[w]=false;
             }else if(event.key.keysym.sym==SDLK_s){
-                vy=0;
+                keys[s]=false;
             }else if(event.key.keysym.sym==SDLK_a){
-                vx=0;
+                keys[a]=false;
             }else if(event.key.keysym.sym==SDLK_d){
-                vx=0;
+                keys[d]=false;
             }
             break;
     }
@@ -73,6 +79,11 @@ void Game::Update() {
             roadRect.x=0;
         }
     }
+
+    if(!keys[w]&&!keys[s])
+        vy=0;
+    if(!keys[a]&&!keys[d])
+        vx=0;
 
     player->Update(mx,my,vx,vy);
 }

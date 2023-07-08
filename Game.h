@@ -31,6 +31,7 @@ private:
     int vx,vy;
     int speed;
     SDL_FRect roadRect;
+    bool keys[4];
 };
 
 
