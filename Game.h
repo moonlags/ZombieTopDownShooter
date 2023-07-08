@@ -29,6 +29,7 @@ private:
     //std::vector<Zombie> zombies;
     //std::vector<Bullet> bullets;
     bool mouseDown;
+    int vx,vy;
 };
 
 

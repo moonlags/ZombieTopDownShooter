@@ -2,12 +2,19 @@
 #include <cmath>
 #include <iostream>
 
-Player::Player(int x,int y,int vx,int vy):x(x),y(y),vx(vx),vy(vy),direction(0){}
+Player::Player(int x,int y,int vx,int vy,int size):size(size),x(x),y(y),vx(vx),vy(vy),direction(0){}
 
-void Player::Update(int mx,int my){
+void Player::Update(int mx,int my,int fx,int fy){
     direction=atan2(my-y,mx-x);
     if (direction<0)
         direction+=2*PI;
+
+    x+=fx*vx;
+    y+=fy*vy;
+}
+
+int Player::GetSize(){
+    return size;
 }
 
 int Player::GetX(){
@@ -23,6 +30,6 @@ int Player::GetDirection(){
 }
 
 SDL_FRect Player::GetGunPos(){
-    SDL_FRect dst={(x-50)+75*cos(direction),(y-50)+75*sin(direction),100,100};
+    SDL_FRect dst={(x-size/2)+(size/4*3)*cos(direction),(y-size/2)+(size/4*3)*sin(direction),size,size};
     return dst;
 }

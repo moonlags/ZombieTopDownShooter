@@ -13,7 +13,7 @@ int main(int argc,char** argv){
 
     while(game.isRunning()){
         FrameStart=SDL_GetTicks();
-
+        
         game.Update();
         game.Render();
     
