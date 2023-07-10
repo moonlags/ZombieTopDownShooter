@@ -9,7 +9,6 @@
 #include "window.h"
 #include <vector>
 #include "Player.hpp"
-
 class Game {
 public:
     Game(int w,int h,int speed);
@@ -26,8 +25,7 @@ private:
     Window window;
     Player* player;
     //std::vector<Zombie> zombies;
-    //std::vector<Bullet> bullets;
-    bool mouseDown;
+    std::vector<Bullet> bullets;
     int vx,vy;
     int speed;
     SDL_FRect roadRect;

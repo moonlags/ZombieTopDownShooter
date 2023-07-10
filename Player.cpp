@@ -2,7 +2,7 @@
 #include <cmath>
 #include <iostream>
 
-Player::Player(int x,int y,int size):size(size),x(x),y(y),direction(0){}
+Player::Player(int x,int y,int size):size(size),x(x),y(y),direction(0),shootcd(0){}
 
 void Player::Update(int mx,int my,int fx,int fy){
     direction=atan2(my-(y+size/2),mx-(x+size/2));
@@ -11,6 +11,8 @@ void Player::Update(int mx,int my,int fx,int fy){
 
     x+=fx;
     y+=fy;
+    shootcd--;
+
     if(x<0){
         x=0;
     }else if(y<0){
@@ -30,6 +32,10 @@ int Player::GetSize(){
     return size;
 }
 
+bool Player::CanShoot(){
+    return shootcd<=0;
+}
+
 int Player::GetX(){
     return x;
 }
@@ -45,4 +51,12 @@ int Player::GetDirection(){
 SDL_FRect Player::GetGunPos(){
     SDL_FRect dst={x+(size/4*3)*cos(direction),y+(size/4*3)*sin(direction),size,size};
     return dst;
+}
+
+Bullet Player::Shoot(){
+    Bullet bullet(x+size/2,y+size/2,direction);
+    x=x-45*cos(direction);
+    y=y-45*sin(direction);
+    shootcd=60;
+    return bullet;   
 }

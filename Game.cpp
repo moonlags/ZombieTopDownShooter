@@ -8,7 +8,7 @@
 
 enum {w,a,s,d};
 
-Game::Game(int w,int h,int speed):speed(speed),running(true),mouseDown(false) {
+Game::Game(int w,int h,int speed):speed(speed),running(true) {
     window.Init("Zombie",w,h);
 
     player_texture=window.LoadTexture("res/player.png");
@@ -38,10 +38,8 @@ void Game::Update() {
             running = false;
             break;
         case SDL_MOUSEBUTTONDOWN:
-            mouseDown=true;
-            break;
-        case SDL_MOUSEBUTTONUP:
-            mouseDown=false;
+            if(player->CanShoot())
+                bullets.push_back(player->Shoot());
             break;
         case SDL_KEYDOWN:
             if(event.key.keysym.sym==SDLK_ESCAPE){
@@ -86,6 +84,10 @@ void Game::Update() {
         vx=0;
 
     player->Update(mx,my,vx,vy);
+
+    for(auto& b:bullets){
+        b.Update();
+    }
 }
 
 void Game::Render() {
@@ -100,6 +102,10 @@ void Game::Render() {
 
     SDL_FRect gunpos=player->GetGunPos();
     window.DrawTexture(weapon_texture,nullptr,&gunpos,player->GetDirection());
+
+    for(auto& b:bullets){
+        window.DrawLine(b.GetPos()->x,b.GetPos()->y,b.GetPos()->w,b.GetPos()->h);
+    }
 
     window.Present();
 }
