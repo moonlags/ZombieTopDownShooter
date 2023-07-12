@@ -97,14 +97,16 @@ void Game::Render() {
     SDL_Rect road2={roadRect.x+1280,0,1280,720};
     window.DrawTexture(road_texture,nullptr,&road2);
 
-    SDL_Rect dst={player->GetX(),player->GetY(),player->GetSize(),player->GetSize()};
+    int p_size=player->GetSize();
+    SDL_Rect dst={player->GetX(),player->GetY(),p_size,p_size};
     window.DrawTexture(player_texture,nullptr,&dst,player->GetDirection());
 
     SDL_FRect gunpos=player->GetGunPos();
     window.DrawTexture(weapon_texture,nullptr,&gunpos,player->GetDirection());
 
     for(auto& b:bullets){
-        window.DrawLine(b.GetPos()->x,b.GetPos()->y,b.GetPos()->w,b.GetPos()->h);
+        SDL_Rect* pos=b.GetPos();
+        window.DrawLine(pos->x,pos->y,pos->w,pos->h);
     }
 
     window.Present();

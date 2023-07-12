@@ -55,8 +55,8 @@ SDL_FRect Player::GetGunPos(){
 
 Bullet Player::Shoot(){
     Bullet bullet(x+size/2,y+size/2,direction);
-    x=x-45*cos(direction);
-    y=y-45*sin(direction);
+    x=x-(size/4*3)*cos(direction);
+    y=y-(size/4*3)*sin(direction);
     shootcd=60;
     return bullet;   
 }
