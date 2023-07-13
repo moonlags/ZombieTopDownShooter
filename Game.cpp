@@ -8,12 +8,13 @@
 
 enum {w,a,s,d};
 
-Game::Game(int w,int h,int speed):speed(speed),running(true) {
+Game::Game(int w,int h,int speed):speed(speed),running(true),score(1) {
     window.Init("Zombie",w,h);
 
     player_texture=window.LoadTexture("res/player.png");
     weapon_texture=window.LoadTexture("res/pistol.png");
     road_texture=window.LoadTexture("res/road.png");
+    zombie_texture=window.LoadTexture("res/zombie.png");
     player=new Player(w/2,h/2,60);
     vx=0;
     vy=0;
@@ -71,6 +72,11 @@ void Game::Update() {
             break;
     }
 
+    if(rand()%1000<=score/2){
+        Zombie zmb(rand()%300-300,rand()%1000-140,60,rand()%4+2);
+        zombies.push_back(zmb);
+    }
+
     if(player->GetX()>960){
         roadRect.x-=speed;
         if(roadRect.x<=-1280){
@@ -85,8 +91,20 @@ void Game::Update() {
 
     player->Update(mx,my,vx,vy);
 
-    for(auto& b:bullets){
-        b.Update();
+    for(int j=0;j<bullets.size();++j){
+        bullets[j].Update();
+        for(int i=0;i<zombies.size();++i){
+            if(SDL_HasIntersection(bullets[j].GetPos(),zombies[i].GetPos())){
+                zombies.erase(std::next(zombies.begin(),i));
+                bullets.erase(std::next(bullets.begin(),j));
+                score++;
+                break;
+            }
+        }
+    }
+
+    for(auto& z:zombies){
+        z.Update(player->GetX()+player->GetSize()/2,player->GetY()+player->GetSize()/2);
     }
 }
 
@@ -107,6 +125,10 @@ void Game::Render() {
     for(auto& b:bullets){
         SDL_Rect* pos=b.GetPos();
         window.DrawLine(pos->x,pos->y,pos->w,pos->h);
+    }
+
+    for(auto& z:zombies){
+        window.DrawTexture(zombie_texture,nullptr,z.GetPos(),z.GetDirection());
     }
 
     window.Present();

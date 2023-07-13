@@ -8,7 +8,7 @@ void Player::Update(int mx,int my,int fx,int fy){
     direction=atan2(my-(y+size/2),mx-(x+size/2));
     if (direction<0)
         direction+=2*PI;
-
+    
     x+=fx;
     y+=fy;
     shootcd--;
