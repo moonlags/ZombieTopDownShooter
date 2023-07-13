@@ -22,7 +22,7 @@ int main(int argc,char** argv){
             SDL_Delay(FrameDelay-FrameTime);
         }
     }
-    std::cout <<"Game over"<<std::endl;
+    std::cout <<"Game over\n";
     SDL_Delay(2000);
     return 0;
 }

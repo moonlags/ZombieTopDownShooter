@@ -15,6 +15,9 @@ Game::Game(int w,int h,int speed):speed(speed),running(true),score(1) {
     weapon_texture=window.LoadTexture("res/pistol.png");
     road_texture=window.LoadTexture("res/road.png");
     zombie_texture=window.LoadTexture("res/zombie.png");
+
+    shoot_sound=Mix_LoadWAV("res/shoot.wav");
+
     player=new Player(w/2,h/2,60);
     vx=0;
     vy=0;
@@ -39,8 +42,10 @@ void Game::Update() {
             running = false;
             break;
         case SDL_MOUSEBUTTONDOWN:
-            if(player->CanShoot())
-                bullets.push_back(player->Shoot());
+            if(player->CanShoot()){
+                bullet = player->Shoot();
+                window.PlaySound(shoot_sound,0);
+            }
             break;
         case SDL_KEYDOWN:
             if(event.key.keysym.sym==SDLK_ESCAPE){
@@ -91,20 +96,16 @@ void Game::Update() {
 
     player->Update(mx,my,vx,vy);
 
-    for(int j=0;j<bullets.size();++j){
-        bullets[j].Update();
-        for(int i=0;i<zombies.size();++i){
-            if(SDL_HasIntersection(bullets[j].GetPos(),zombies[i].GetPos())){
-                zombies.erase(std::next(zombies.begin(),i));
-                bullets.erase(std::next(bullets.begin(),j));
-                score++;
-                break;
-            }
-        }
-    }
+    bullet.Update();
 
-    for(auto& z:zombies){
-        z.Update(player->GetX()+player->GetSize()/2,player->GetY()+player->GetSize()/2);
+    for(int i=0;i<zombies.size();++i){
+        zombies[i].Update(player->GetX()+player->GetSize()/2,player->GetY()+player->GetSize()/2);
+        if(SDL_HasIntersection(bullet.GetPos(),zombies[i].GetPos())){
+            zombies.erase(std::next(zombies.begin(),i));
+            bullet=Bullet(1300,800,0);
+            score++;
+            break;
+        }
     }
 }
 
@@ -112,7 +113,7 @@ void Game::Render() {
     window.Clear();
 
     window.DrawTexture(road_texture,nullptr,&roadRect,0);
-    SDL_Rect road2={roadRect.x+1280,0,1280,720};
+    SDL_Rect road2={static_cast<int>(roadRect.x)+1280,0,1280,720};
     window.DrawTexture(road_texture,nullptr,&road2);
 
     int p_size=player->GetSize();
@@ -122,10 +123,8 @@ void Game::Render() {
     SDL_FRect gunpos=player->GetGunPos();
     window.DrawTexture(weapon_texture,nullptr,&gunpos,player->GetDirection());
 
-    for(auto& b:bullets){
-        SDL_Rect* pos=b.GetPos();
-        window.DrawLine(pos->x,pos->y,pos->w,pos->h);
-    }
+    SDL_Rect* pos=bullet.GetPos();
+    window.DrawLine(pos->x,pos->y,pos->w,pos->h);
 
     for(auto& z:zombies){
         window.DrawTexture(zombie_texture,nullptr,z.GetPos(),z.GetDirection());

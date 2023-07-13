@@ -30,9 +30,16 @@ SDL_Event Window::GetEvent(){
 void Window::Init(const char* title,int w,int h) {
     SDL_Init(SDL_INIT_EVERYTHING);
     IMG_Init(IMG_INIT_PNG);
+    Mix_Init(MIX_INIT_MP3);
+    Mix_OpenAudio(44100,MIX_DEFAULT_FORMAT,2,2048);
+    Mix_Volume(-1,MIX_MAX_VOLUME);
 
     window= SDL_CreateWindow(title,SDL_WINDOWPOS_UNDEFINED,SDL_WINDOWPOS_UNDEFINED,w,h,SDL_WINDOW_SHOWN);
     renderer= SDL_CreateRenderer(window,-1,SDL_RENDERER_ACCELERATED);
+}
+
+void Window::PlaySound(Mix_Chunk* sound,int loops){
+    Mix_PlayChannel(-1,sound,loops);
 }
 
 void Window::DrawTexture(SDL_Texture* texture,SDL_Rect* src,SDL_Rect* dst){

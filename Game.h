@@ -23,11 +23,12 @@ private:
     SDL_Texture* weapon_texture;
     SDL_Texture* road_texture;
     SDL_Texture* zombie_texture;
+    Mix_Chunk* shoot_sound;
     bool running;
     Window window;
     Player* player;
     std::vector<Zombie> zombies;
-    std::vector<Bullet> bullets;
+    Bullet bullet{-100,-100,0};
     int vx,vy;
     int speed;
     SDL_FRect roadRect;
